@@ -16,6 +16,10 @@ public class Hand {
   public Hand() {
   }
 
+  public List<Card> cards() {
+    return List.copyOf(cards);
+  }
+
   private int value() {
     int handValue = cards
         .stream()
@@ -33,10 +37,6 @@ public class Hand {
     }
 
     return handValue;
-  }
-
-  String displayFirstCard() {
-    return ConsoleCard.display(cards.get(0));
   }
 
   boolean dealerMustDrawCard() {
