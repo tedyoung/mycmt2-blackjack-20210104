@@ -13,13 +13,15 @@ public class Game {
   private final Hand dealerHand = new Hand();
   private final Hand playerHand = new Hand();
 
+  private boolean playerDone = false;
+
   public static void main(String[] args) {
     displayWelcomeScreen();
     playGame();
     resetScreen();
   }
 
-  private static void resetScreen() {
+  public static void resetScreen() {
     System.out.println(ansi().reset());
   }
 
@@ -29,7 +31,7 @@ public class Game {
     game.play();
   }
 
-  private static void displayWelcomeScreen() {
+  public static void displayWelcomeScreen() {
     System.out.println(ansi()
                            .bgBright(Ansi.Color.WHITE)
                            .eraseScreen()
@@ -64,7 +66,7 @@ public class Game {
     dealerHand.drawFrom(deck);
   }
 
-  private void determineOutcome() {
+  public void determineOutcome() {
     if (playerHand.isBusted()) {
       System.out.println("You Busted, so you lose.  💸");
     } else if (dealerHand.isBusted()) {
@@ -78,7 +80,7 @@ public class Game {
     }
   }
 
-  private void dealerTurn() {
+  public void dealerTurn() {
     // Dealer makes its choice automatically based on a simple heuristic (<=16, hit, 17>stand)
     if (!playerHand.isBusted()) {
       while (dealerHand.dealerMustDrawCard()) {
@@ -107,13 +109,13 @@ public class Game {
     }
   }
 
-  private String inputFromPlayer() {
+  public String inputFromPlayer() {
     System.out.println("[H]it or [S]tand?");
     Scanner scanner = new Scanner(System.in);
     return scanner.nextLine();
   }
 
-  private void displayGameState() {
+  public void displayGameState() {
     System.out.print(ansi().eraseScreen().cursor(1, 1));
     System.out.println("Dealer has: ");
     System.out.println(ConsoleHand.displayFirstCard(dealerHand)); // first card is Face Up
@@ -141,7 +143,7 @@ public class Game {
             .a("└─────────┘"));
   }
 
-  private void displayFinalGameState() {
+  public void displayFinalGameState() {
     System.out.print(ansi().eraseScreen().cursor(1, 1));
     System.out.println("Dealer has: ");
     System.out.println(ConsoleHand.cardsAsString(dealerHand));
@@ -153,4 +155,16 @@ public class Game {
     System.out.println(" (" + playerHand.displayValue() + ")");
   }
 
+  public void playerHits() {
+    playerHand.drawFrom(deck);
+    playerDone = playerHand.isBusted();
+  }
+
+  public void playerStands() {
+    playerDone = true;
+  }
+
+  public boolean isPlayerDone() {
+    return playerDone;
+  }
 }
