@@ -41,6 +41,7 @@ public class Hand {
   }
 
   public void drawFrom(Deck deck) {
+    // if Busted, throw IllegalStateException
     cards.add(deck.draw());
   }
 

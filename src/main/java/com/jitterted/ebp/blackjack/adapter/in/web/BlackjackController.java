@@ -29,4 +29,25 @@ public class BlackjackController {
     return "blackjack";
   }
 
+  @PostMapping("/hit")
+  public String hitCommand() {
+    game.playerHits();
+
+    if (game.isPlayerDone()) {
+      return "redirect:/done";
+    }
+
+    return "redirect:/game";
+  }
+
+  @GetMapping("/done")
+  public String gameDone(Model model) {
+    GameView gameView = GameView.of(game);
+    model.addAttribute("gameView", gameView);
+
+    model.addAttribute("outcome", game.determineOutcome());
+
+    return "done";
+  }
+
 }

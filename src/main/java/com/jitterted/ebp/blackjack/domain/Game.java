@@ -62,11 +62,13 @@ public class Game {
   }
 
   public void playerHits() {
+    // if isPlayerDone, throw IllegalStateException
     playerHand.drawFrom(deck);
     playerDone = playerHand.isBusted();
   }
 
   public void playerStands() {
+    // if isPlayerDone, throw IllegalStateException
     playerDone = true;
   }
 

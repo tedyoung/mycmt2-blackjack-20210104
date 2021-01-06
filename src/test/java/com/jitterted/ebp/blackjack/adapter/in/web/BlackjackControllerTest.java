@@ -48,4 +48,52 @@ class BlackjackControllerTest {
         .containsExactly("10♦", "K♦");
   }
 
+  @Test
+  public void hitCommandDealsAdditionalCardToPlayer() throws Exception {
+    Game game = new Game();
+    BlackjackController blackjackController = new BlackjackController(game);
+    blackjackController.startGame();
+
+    blackjackController.hitCommand();
+
+    assertThat(game.playerHand().cards())
+        .hasSize(3);
+  }
+
+  @Test
+  public void whenPlayerIsDoneAfterBustingRedirectToDonePage() throws Exception {
+    Deck stubDeck = new StubDeck(List.of(new Card(Suit.DIAMONDS, Rank.TEN),
+                                         new Card(Suit.HEARTS, Rank.TWO),
+                                         new Card(Suit.DIAMONDS, Rank.KING),
+                                         new Card(Suit.CLUBS, Rank.THREE),
+                                         new Card(Suit.DIAMONDS, Rank.SEVEN)));
+
+    Game game = new Game(stubDeck);
+    BlackjackController blackjackController = new BlackjackController(game);
+    blackjackController.startGame();
+
+    String view = blackjackController.hitCommand();
+
+    assertThat(view)
+        .isEqualTo("redirect:/done");
+  }
+
+  @Test
+  public void donePageShowsFinalGameViewWithOutcome() throws Exception {
+    Game game = new Game();
+    BlackjackController blackjackController = new BlackjackController(game);
+    blackjackController.startGame();
+
+    Model model = new ConcurrentModel();
+    blackjackController.gameDone(model);
+
+    assertThat(model.getAttribute("gameView"))
+        .isInstanceOf(GameView.class);
+
+    String outcome = (String) model.getAttribute("outcome");
+
+    assertThat(outcome)
+        .isNotBlank();
+  }
+
 }
