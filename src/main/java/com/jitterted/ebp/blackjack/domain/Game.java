@@ -29,7 +29,9 @@ public class Game {
   }
 
   public String determineOutcome() {
-    if (playerHand.isBusted()) {
+    if (playerHand.isBlackjack()) {
+      return "You won Blackjack, congratulations!!";
+    } else if (playerHand.isBusted()) {
       return("You Busted, so you lose.  💸");
     } else if (dealerHand.isBusted()) {
       return("Dealer went BUST, Player wins! Yay for you!! 💵");

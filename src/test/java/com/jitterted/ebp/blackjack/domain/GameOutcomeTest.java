@@ -31,4 +31,28 @@ class GameOutcomeTest {
         .isEqualTo("You Busted, so you lose.  💸");
   }
 
+  @Test
+  public void playerWithBlackjackWins() throws Exception {
+    Deck stubDeck = new StubDeck(Rank.TEN, Rank.EIGHT, Rank.ACE, Rank.NINE);
+    Game game = new Game(stubDeck);
+
+    game.initialDeal();
+
+    assertThat(game.determineOutcome())
+        .isEqualTo("You won Blackjack, congratulations!!");
+  }
+
+  @Test
+  public void playerWithHandValueOf21ForThreeCardsDoesNotWinBlackjack() throws Exception {
+    Deck stubDeck = new StubDeck(Rank.TEN, Rank.EIGHT, Rank.NINE, Rank.QUEEN, Rank.TWO);
+    Game game = new Game(stubDeck);
+
+    game.initialDeal();
+    game.playerHits();
+    game.playerStands();
+
+    assertThat(game.determineOutcome())
+        .isEqualTo("You beat the Dealer! 💵");
+  }
+
 }
