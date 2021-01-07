@@ -70,6 +70,7 @@ public class Game {
   public void playerStands() {
     // if isPlayerDone, throw IllegalStateException
     playerDone = true;
+    dealerTurn();
   }
 
   public boolean isPlayerDone() {
