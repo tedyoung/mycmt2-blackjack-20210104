@@ -1,20 +1,29 @@
 package com.jitterted.ebp.blackjack.domain;
 
+import com.jitterted.ebp.blackjack.domain.port.GameMonitor;
+
 public class Game {
 
   private final Deck deck;
 
   private final Hand dealerHand = new Hand();
   private final Hand playerHand = new Hand();
+  private final GameMonitor gameMonitor;
 
   private boolean playerDone = false;
 
   public Game() {
-    deck = new Deck();
+    this(new Deck());
   }
 
   public Game(Deck deck) {
     this.deck = deck;
+    this.gameMonitor = game -> {};
+  }
+
+  public Game(Deck deck, GameMonitor gameMonitor) {
+    this.deck = deck;
+    this.gameMonitor = gameMonitor;
   }
 
   public void initialDeal() {
@@ -65,12 +74,18 @@ public class Game {
     // if isPlayerDone, throw IllegalStateException
     playerHand.drawFrom(deck);
     playerDone = playerHand.isBusted();
+    roundCompleted();
   }
 
   public void playerStands() {
     // if isPlayerDone, throw IllegalStateException
     playerDone = true;
     dealerTurn();
+    roundCompleted();
+  }
+
+  private void roundCompleted() {
+    gameMonitor.roundCompleted(this);
   }
 
   public boolean isPlayerDone() {
