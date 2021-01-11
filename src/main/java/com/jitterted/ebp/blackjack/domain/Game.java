@@ -26,6 +26,11 @@ public class Game {
     this.gameMonitor = gameMonitor;
   }
 
+  public Game(GameMonitor gameMonitor) {
+    this.deck = new Deck();
+    this.gameMonitor = gameMonitor;
+  }
+
   public void initialDeal() {
     dealRoundOfCards();
     dealRoundOfCards();
@@ -74,7 +79,9 @@ public class Game {
     // if isPlayerDone, throw IllegalStateException
     playerHand.drawFrom(deck);
     playerDone = playerHand.isBusted();
-    roundCompleted();
+    if (playerDone) {
+      roundCompleted();
+    }
   }
 
   public void playerStands() {
